@@ -1,3 +1,0 @@
-C:/Users/danuy/GitHub/MyRepoLabs/build/CMakeFiles/MYREPOLABS.dir
-C:/Users/danuy/GitHub/MyRepoLabs/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/danuy/GitHub/MyRepoLabs/build/CMakeFiles/ZERO_CHECK.dir
