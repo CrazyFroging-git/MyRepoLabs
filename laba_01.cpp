@@ -1,4 +1,8 @@
 #include <iostream>
+/*
+123
+321
+*/
 
 int main() {
     std::cout << "unsigned short 16 min-0 max-" << pow(2, 16) - 1 << "\n";
