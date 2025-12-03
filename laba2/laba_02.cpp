@@ -45,7 +45,6 @@ int main() {
 		else {
 			cout << number1 << "*" << number2 << " = " << number1 * number2 << endl;
 		}
-
 	}
 	else {
 		num8 ^= (1 << number_bit_i + 1) | (1 << number_bit_i - 1);

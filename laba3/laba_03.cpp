@@ -9,9 +9,15 @@ int main() {
     cout << "Введите количество чисел в последовательности ";
     cin >> number_of_numbers;
     float sum_of_numbers = 0;
-    float max_number = -99999.0;
-    int index_of_max_number = 0;
-    for (int i = 1; i != number_of_numbers + 1; i++) {
+    float max_number = -90;
+    int index_of_max_number = -1;
+    cin >> buffer;
+    if ((-0.36 < buffer) && (buffer <= 10.1)) {
+        max_number = buffer;
+        index_of_max_number = 1;
+    }
+    
+    for (int i = 1; i != number_of_numbers; i++) {
         cin >> buffer;
         if ((-0.36 < buffer) && (buffer <= 10.1)) {
             sum_of_numbers += buffer;
@@ -21,25 +27,31 @@ int main() {
                 }
         }
     }
-    if (index_of_max_number == 0) {
+    if (index_of_max_number == -1) {
         cout << "Ни одно из чисел не находится в диапазоне (-0,36; 10,1]" << endl;
     }
-    cout << "Максимальное число: " << max_number << endl;
-    cout << "Номер максимального числа в последовательности: " << index_of_max_number << endl;
-    cout << "Сумма чисел: " << sum_of_numbers << endl;
-    
+    else {
+        cout << "Максимальное число: " << max_number << endl;
+        cout << "Номер максимального числа в последовательности: " << index_of_max_number << endl;
+        cout << "Сумма чисел: " << sum_of_numbers << endl;
+    }
     int number;
     cout << "Введите число по модулю не превышающее 1.000" << endl; cin >> number;
     number = abs(number);
-    int prod = 1;
-    if (number == 0) {
-        prod = 0;
+    if (number > 1000){
+        int prod = 1;
+        if (number == 0) {
+            prod = 0;
+        }
+        while (number != 0) {
+            int x = number % 10;
+            prod *= x;
+            number /= 10;
+        }
+        cout << "Произведение цифр: " << prod << endl;
     }
-    while (number != 0) {
-        int x = number % 10;
-        prod *= x;
-        number /= 10;
+    else {
+        cout << "Вы ввели число по модулю больше 1.000" << endl;
     }
-cout << "Произведение цифр: " << prod << endl;
     return 1;
 }
