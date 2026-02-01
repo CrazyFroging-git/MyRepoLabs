@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "Player.hpp"
 
 /*class Player{
@@ -67,12 +66,19 @@ public:
 int main() {
     setlocale(LC_ALL, "ru_RU.UTF-8");
     try {
-        Player player1("Иван", 0, 0, 100, "Бегает");
+        std::vector<std::string> startingItems = {"меч", "щит", "зелье"};
+        std::vector<std::string> items_player2 = {"лук", "монтировка", "скотч", "стрелы", "зелье"};
+        //startingItems.insert(startingItems.end(), "меч");
+        //std::cout << startingItems.size() << std::endl;
+        Player player1("Иван", 0, 0, 100, "Бегает", startingItems);
         std::cout << player1.GetName() << std::endl;
         std::cout << player1.GetPosX() << std::endl;
         player1.setPosX(100);
+        Player player2("Роберт", 11, 79, 91, "Обыскивает сундук", items_player2);
         std::cout << player1.GetPosX() << std::endl;
+        player1 = player1 + player2;
         player1.ViewAll();
+        player2.ViewAll();
     }
     catch (const std::invalid_argument& e) {
         std::cout << "Ошибка: " << e.what() << std::endl;
