@@ -16,8 +16,12 @@ public:
     ~Player();
     Player& operator=(const Player& other);
     Player operator+(const Player& other) const;
+    Player operator-(const Player& other) const;
+    Player operator/(const Player& other) const;
     void setPosX(int posx);
     void setPosY(int posy);
+    void setInventoryInsert(std::string item);
+    void setInventoryRemove(std::string item);
     void Setactionstatus(std::string actionstatus);
     void DrinkFlask(int k);
     void TakeDamage(int k);

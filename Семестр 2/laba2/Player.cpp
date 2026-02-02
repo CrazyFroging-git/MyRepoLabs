@@ -1,6 +1,8 @@
 #include "Player.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <cstdlib>
+
 
 // функция вывода инвентаря
 void InventoryView(std::vector<std::string> inventory_){
@@ -74,8 +76,32 @@ Player Player::operator+(const Player& other) const{
     Player result = *this;
     result.name_ = other.name_;
     result.posx_ = (this->posx_ + other.posx_) / 2;
-    result.posy_ = (result.posy_ + other.posy_) / 2;
+    result.posy_ = (this->posy_ + other.posy_) / 2;
     result.inventory_ = plus_inventory(this->inventory_, other.inventory_);
+    return result;
+}
+Player Player::operator-(const Player& other) const{
+    Player result = *this;
+    std::string bufer = other.inventory_[(rand() % other.inventory_.size())];
+    if (std::find(result.inventory_.begin(), result.inventory_.end(), bufer) == result.inventory_.end()){
+        return result;
+    }
+    result.inventory_.erase(std::remove(result.inventory_.begin(), result.inventory_.end(), bufer), result.inventory_.end());
+    return result;
+}
+
+Player Player::operator/(const Player& other) const{
+    Player result = *this;
+    result.posx_ = ((abs(result.posx_) + 1) / (abs(this->posx_) + 1));
+    result.posy_ = ((abs(result.posy_) + 1) / (abs(this->posy_) + 1));
+    int middle1 = result.inventory_.size() / 2;
+    int middle2 = other.inventory_.size() / 2;
+    std::vector<std::string> firstHalf(result.inventory_.begin(), result.inventory_.begin() + middle1);
+    std::vector<std::string> secondHalf(other.inventory_.begin() + middle2, other.inventory_.end());
+    result.inventory_.clear();
+    result.inventory_.reserve(firstHalf.size() + secondHalf.size());
+    result.inventory_.insert(result.inventory_.end(), firstHalf.begin(), firstHalf.end());
+    result.inventory_.insert(result.inventory_.end(), secondHalf.begin(), secondHalf.end());
     return result;
 }
 
@@ -84,6 +110,18 @@ void Player::setPosX(int posx){
 }
 void Player::setPosY(int posy){
     posy_ = posy;
+}
+void Player::setInventoryInsert(std::string item){
+    inventory_.push_back(item);
+    std::cout << "Элемент -"<< item <<"- добавлен в инвентарь игрока -"<< name_ << "-" << std::endl;
+}
+void Player::setInventoryRemove(std::string item){
+    if (std::find(inventory_.begin(), inventory_.end(), item) == inventory_.end()){
+        std::cout << "Элемента -"<< item <<"- нету в инвентаре игрока -"<< name_ << "-" << std::endl;
+        return;
+    }
+    inventory_.erase(std::remove(inventory_.begin(), inventory_.end(), item), inventory_.end());
+    std::cout << "Элемент -"<< item <<"- убран из инвентаря игрока -"<< name_ << "-" << std::endl;
 }
 void Player::Setactionstatus(std::string actionstatus){
     actionstatus_ = actionstatus;
@@ -114,7 +152,7 @@ void Player::ViewAll() const{
       << "     HP: " << hp_ 
       << "     Позиция: (" << posx_ 
       << ", " << posy_ << ")"
-      << "     " << "Действие:" << actionstatus_ 
+      << "     " << "Действие: " << actionstatus_ 
       << "     "<< "Инвентарь: ";
       InventoryView(inventory_);
 }
