@@ -14,6 +14,7 @@ public:
     Player(std::string name, int posx, int posy, int hp, std::string actionstatus, std::vector<std::string> inventory = {});
     Player(const Player &other);
     ~Player();
+    std::string randomName();
     Player& operator=(const Player& other);
     Player operator+(const Player& other) const;
     Player operator-(const Player& other) const;

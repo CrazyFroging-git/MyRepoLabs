@@ -1,9 +1,22 @@
 #include "Player.hpp"
 #include <iostream>
 #include <stdexcept>
+#include <algorithm>
 #include <cstdlib>
 
 
+void removeDuplicates(std::vector<std::string>& vec) {    
+    for (size_t i = 0; i < vec.size(); i++) {
+        for (size_t j = i + 1; j < vec.size(); ) {
+            if (vec[j] == vec[i]) {
+                vec.erase(vec.begin() + j);
+            } 
+            else {
+                j++;
+            }
+        }
+    }
+}
 // функция вывода инвентаря
 void InventoryView(std::vector<std::string> inventory_){
     if (inventory_.empty()) {
@@ -56,7 +69,15 @@ Player::Player(const Player &other):
     std::cout << "Игрок копирован" << std::endl;
 }
 Player::~Player(){
+    if (!inventory_.empty()){
+        inventory_.clear();
+        std::cout << "Вектор очищен" << std::endl;
+    }
+    
     std::cout << "-------------Деструктор-------------" << std::endl;
+}
+std::string Player::randomName() {
+    return "Player_" + std::to_string(rand() % 100000);
 }
 Player& Player::operator=(const Player& other){
     if (this == &other) {
@@ -74,7 +95,8 @@ Player& Player::operator=(const Player& other){
 
 Player Player::operator+(const Player& other) const{
     Player result = *this;
-    result.name_ = other.name_;
+    removeDuplicates(result.inventory_);
+    result.name_ = result.randomName();
     result.posx_ = (this->posx_ + other.posx_) / 2;
     result.posy_ = (this->posy_ + other.posy_) / 2;
     result.inventory_ = plus_inventory(this->inventory_, other.inventory_);
@@ -82,6 +104,9 @@ Player Player::operator+(const Player& other) const{
 }
 Player Player::operator-(const Player& other) const{
     Player result = *this;
+    result.name_ = result.randomName();
+    if (other.inventory_.empty()) return result;
+    int items_to_remove = rand() % other.inventory_.size() + 1;
     std::string bufer = other.inventory_[(rand() % other.inventory_.size())];
     if (std::find(result.inventory_.begin(), result.inventory_.end(), bufer) == result.inventory_.end()){
         return result;
@@ -92,6 +117,7 @@ Player Player::operator-(const Player& other) const{
 
 Player Player::operator/(const Player& other) const{
     Player result = *this;
+    result.name_ = result.randomName();
     result.posx_ = ((abs(result.posx_) + 1) / (abs(this->posx_) + 1));
     result.posy_ = ((abs(result.posy_) + 1) / (abs(this->posy_) + 1));
     int middle1 = result.inventory_.size() / 2;
