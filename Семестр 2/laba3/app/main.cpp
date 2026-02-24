@@ -1,20 +1,21 @@
 #include <iostream>
-#include <functions.hpp>
+#include <Player.hpp>
+#include <Item.hpp>
 
 //1
 int main() {
     srand(time(0));
     setlocale(LC_ALL, "ru_RU.UTF-8");
     try {
-        std::vector<std::string> items_player1 = {"sword", "shield", "potion"};
-        std::vector<std::string> items_player2 = {"bow", "lom", "skotch", "arrows", "potion"};
+        //std::vector<std::string> items_player1 = {"sword", "shield", "potion"};
+        //std::vector<std::string> items_player2 = {"bow", "lom", "skotch", "arrows", "potion"};
         //startingItems.insert(startingItems.end(), "меч");
         //std::cout << startingItems.size() << std::endl;
-        Player player1("Иван", 0, 0, 100, "Убегает от монстра", items_player1);
+        Player player1("Иван", 0, 0, 100, "Убегает от монстра", {});
         //std::cout << player1.GetName() << std::endl;
         //std::cout << player1.GetPosX() << std::endl;
         //player1.setPosX(100);
-        Player player2("Роберт", 11, 79, 91, "Обыскивает сундук", items_player2);
+        Player player2("Роберт", 11, 79, 91, "Обыскивает сундук", {});
         //std::cout << player1.GetPosX() << std::endl;
         Player player3 = player1 / player2;
         player1.ViewAll();

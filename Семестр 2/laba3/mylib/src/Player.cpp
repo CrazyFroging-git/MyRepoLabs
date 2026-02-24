@@ -1,14 +1,14 @@
-#include <functions.hpp>
+#include <Player.hpp>
+#include <Item.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <algorithm>
 #include <cstdlib>
 
-
-void removeDuplicates(std::vector<std::string>& vec) {    
+void removeDuplicates(std::vector<Item>& vec) {    
     for (size_t i = 0; i < vec.size(); i++) {
         for (size_t j = i + 1; j < vec.size(); ) {
-            if (vec[j] == vec[i]) {
+            if (vec[j].name == vec[i].name) {
                 vec.erase(vec.begin() + j);
             } 
             else {
@@ -18,13 +18,13 @@ void removeDuplicates(std::vector<std::string>& vec) {
     }
 }
 // функция вывода инвентаря
-void InventoryView(std::vector<std::string> inventory_){
+void InventoryView(std::vector<Item> inventory_){
     if (inventory_.empty()) {
         std::cout << "пусто";
     } else {
         // Выводим все предметы через запятую
         for (size_t i = 0; i < inventory_.size(); ++i) {
-            std::cout << inventory_[i];
+            std::cout << inventory_[i].name;
             if (i != inventory_.size() - 1) {
                 std::cout << ", ";
             }
@@ -33,8 +33,8 @@ void InventoryView(std::vector<std::string> inventory_){
     std::cout << std::endl;
 }
 
-std::vector<std::string> plus_inventory(std::vector<std::string> result, std::vector<std::string> oth){
-    std::vector<std::string> inventory = result;
+std::vector<Item> plus_inventory(std::vector<Item> result, std::vector<Item> oth){
+    std::vector<Item> inventory = result;
     for (int i = 0; i < oth.size(); i++){
         if ((std::find(inventory.begin(), inventory.end(), oth[i])) == inventory.end()){
             inventory.push_back(oth[i]);
@@ -45,7 +45,7 @@ std::vector<std::string> plus_inventory(std::vector<std::string> result, std::ve
 
 
 
-Player::Player(std::string name, int posx, int posy, int hp, std::string actionstatus, std::vector<std::string> inventory){
+Player::Player(std::string name, int posx, int posy, int hp, std::string actionstatus, std::vector<Item> inventory){
     name_ = name;
     posx_ = posx;
     posy_ = posy;
@@ -107,7 +107,7 @@ Player Player::operator-(const Player& other) const{
     result.name_ = result.randomName();
     if (other.inventory_.empty()) return result;
     int items_to_remove = rand() % other.inventory_.size() + 1;
-    std::string bufer = other.inventory_[(rand() % other.inventory_.size())];
+    Item bufer = other.inventory_[(rand() % other.inventory_.size())];
     if (std::find(result.inventory_.begin(), result.inventory_.end(), bufer) == result.inventory_.end()){
         return result;
     }
@@ -122,8 +122,8 @@ Player Player::operator/(const Player& other) const{
     result.posy_ = ((abs(result.posy_) + 1) / (abs(this->posy_) + 1));
     int middle1 = result.inventory_.size() / 2;
     int middle2 = other.inventory_.size() / 2;
-    std::vector<std::string> firstHalf(result.inventory_.begin(), result.inventory_.begin() + middle1);
-    std::vector<std::string> secondHalf(other.inventory_.begin() + middle2, other.inventory_.end());
+    std::vector<Item> firstHalf(result.inventory_.begin(), result.inventory_.begin() + middle1);
+    std::vector<Item> secondHalf(other.inventory_.begin() + middle2, other.inventory_.end());
     result.inventory_.clear();
     result.inventory_.reserve(firstHalf.size() + secondHalf.size());
     result.inventory_.insert(result.inventory_.end(), firstHalf.begin(), firstHalf.end());
@@ -131,23 +131,18 @@ Player Player::operator/(const Player& other) const{
     return result;
 }
 
+void Player::take_item_to_inventory(Item it){
+    if (std::find(inventory_.begin(), inventory_.end(), it) == inventory_.end()) {
+        inventory_.push_back(it);
+    } else {
+        std::cout << "Предмет " << it.name << " уже есть в инвентаре." << std::endl;
+    }
+}
 void Player::setPosX(int posx){
     posx_ = posx;
 }
 void Player::setPosY(int posy){
     posy_ = posy;
-}
-void Player::setInventoryInsert(std::string item){
-    inventory_.push_back(item);
-    std::cout << "Элемент -"<< item <<"- добавлен в инвентарь игрока -"<< name_ << "-" << std::endl;
-}
-void Player::setInventoryRemove(std::string item){
-    if (std::find(inventory_.begin(), inventory_.end(), item) == inventory_.end()){
-        std::cout << "Элемента -"<< item <<"- нету в инвентаре игрока -"<< name_ << "-" << std::endl;
-        return;
-    }
-    inventory_.erase(std::remove(inventory_.begin(), inventory_.end(), item), inventory_.end());
-    std::cout << "Элемент -"<< item <<"- убран из инвентаря игрока -"<< name_ << "-" << std::endl;
 }
 void Player::Setactionstatus(std::string actionstatus){
     actionstatus_ = actionstatus;
@@ -158,6 +153,9 @@ void Player::DrinkFlask(int k){
         hp_ = 0;
     }
 }
+void Player::OpenLootBox(LootBox box){
+    take_item_to_inventory(box.Open_LootBox());
+}
 void Player::TakeDamage(int k){
     hp_ -= k;
     if (hp_ <= 0){
@@ -167,7 +165,7 @@ void Player::TakeDamage(int k){
 void Player::ViewInventory() const {
     std::cout << "Инвентарь игрока " << name_ << ":" << std::endl;
     for (const auto& item : inventory_) {
-        std::cout << "- " << item << std::endl;
+        std::cout << "- " << item.name << std::endl;
     }
     if (inventory_.empty()) {
         std::cout << "(пусто)" << std::endl;
