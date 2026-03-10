@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <Windows.h>
+#include <fstream>
 
 class Player{
 private:
@@ -16,17 +18,17 @@ public:
         hp_ = hp;
         actionstatus_ = actionstatus;
         if (name.empty()) {
-            throw std::invalid_argument("РРјСЏ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј!");
+            throw std::invalid_argument("Имя не может быть пустым!");
         }
         if (hp < 0) {
-            throw std::invalid_argument("HP РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РїРѕР»РѕР¶РёС‚РµР»СЊРЅС‹Рј С‡РёСЃР»РѕРј!");
+            throw std::invalid_argument("HP должен быть положительным числом!");
         }
     }
     Player(const Player &other): name_(other.name_), posx_(other.posx_), posy_(other.posy_), hp_(other.hp_), actionstatus_(other.actionstatus_){
-        std::cout << "РРіСЂРѕРє РєРѕРїРёСЂРѕРІР°РЅ" << std::endl;
+        std::cout << "Игрок копирован" << std::endl;
     }
     ~Player(){
-        std::cout << "Р”РµСЃС‚СЂСѓРєС‚РѕСЂ" << std::endl;
+        std::cout << "Деструктор" << std::endl;
     }
     void setPosX(int posx){
         posx_ = posx;
@@ -50,11 +52,11 @@ public:
         }
     }
     void ViewAll(){
-        std::cout << "РРіСЂРѕРє 1: " << name_
+        std::cout << "Игрок 1: " << name_
           << ",    HP: " << hp_ 
-          << ",    РџРѕР·РёС†РёСЏ: (" << posx_ 
+          << ",    Позиция: (" << posx_ 
           << ", " << posy_ << ")"
-          << ",    " << "Р”РµР№СЃС‚РІРёРµ:" << actionstatus_ << std::endl;
+          << ",    " << "Действие:" << actionstatus_ << std::endl;
     }
     std::string GetName() const {return name_;}
     int GetPosX() const {return posx_;}
@@ -64,19 +66,11 @@ public:
 
 
 int main() {
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-    try {
-        Player player1("РРІР°РЅ", 0, 0, 100, "Р‘РµРіР°РµС‚");
-        std::cout << player1.GetName() << std::endl;
-        std::cout << player1.GetPosX() << std::endl;
-        player1.setPosX(100);
-        std::cout << player1.GetPosX() << std::endl;
-        player1.ViewAll();
-    }
-    catch (const std::invalid_argument& e) {
-        std::cout << "РћС€РёР±РєР°: " << e.what() << std::endl;
-    }
-    catch (...) {
-        std::cout << "РќРµРёР·РІРµСЃС‚РЅР°СЏ РѕС€РёР±РєР°: " << std::endl;
-    }
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+    setlocale(LC_ALL, "Russian");
+    std::ifstream in("text.txt");
+    unsigned char c[100];
+    in >> c;
+    std::cout << c;
 }

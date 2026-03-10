@@ -2,13 +2,11 @@ cmake_minimum_required(VERSION 3.15) # Проверка версии CMake.
 									 # Если версия установленой программы
 									 # старее указаной, произайдёт аварийный выход.
 
-set(PROJECT_NAME mylib) 			 # задать значение PROJECT_NAME		 
+set(PROJECT_NAME laba_string) 			 # задать значение PROJECT_NAME		 
 project("${PROJECT_NAME}")           # установить имя проекта
 
 
 set(CMAKE_CXX_STANDARD 20)			 # устанавливаем 17 стандарт языка
 
 # Сказать программе, что должен быть исполняемый файл
-add_library("${PROJECT_NAME}" STATIC src/item.cpp src/lootbox.cpp src/player.cpp)
-
-target_include_directories("${PROJECT_NAME}" PUBLIC inc)
+add_executable("${PROJECT_NAME}" main.cpp)
