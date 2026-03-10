@@ -4,6 +4,22 @@
 #include <sstream>
 #include <Windows.h>
 
+
+
+bool isUnique(const char* fileName, const unsigned char* word) {
+    std::ifstream check(fileName);
+    if (!check.is_open()) return true; // Если файла еще нет, слово уникально
+
+    char buffer[100];
+    while (check >> buffer) {
+        if (strcmp(buffer, (char*)word) == 0) {
+            check.close();
+            return false; // Нашли дубликат
+        }
+    }
+    check.close();
+    return true;
+}
 void to_lower(unsigned char *str){
     for (int i = 0; str[i] != '\0'; i++) {
         if (str[i] >= 192 && str[i] <= 223) { // А-Я
@@ -138,27 +154,20 @@ int main(){
     }
     std::cout << "Считано число N: " << N << std::endl;
     std::cout << "Считана буква: " << targetLetter << std::endl;
-    std::ofstream outText("..\\..\\text.txt");
-    std::ifstream Text("..\\..\\text.txt");
     unsigned char word2[100];
-    bool k = 1;
     while(in2 >> word){
-        k = 1;
         removeH(word);
         int len = strlen((char*)word);
         if (word[len - 1] == targetLetter){
-            while (Text >> word2){
-                if (word == word2){
-                    k = 0;
-                }
-            }
-            if (k == 1){
-                outText << word << std::endl;
+            if (isUnique("..\\..\\text.txt", word) == 1){
+                std::ofstream outText("..\\..\\text.txt", std::ios::app);
+                outText << word << "\n";
+                outText.close();
             }
         }
     }
+    
     in2.close();
-    outText.close();
     std::ifstream intext("..\\..\\text.txt");
     unsigned char bufer[100];
     int count = 0;
@@ -173,12 +182,20 @@ int main(){
             count++;
         }
     }
-    std::ofstream output2("..\\..\\output2.txt");
-    //while (N > 0){
-        
-    //}
+    std::ofstream out("..\\..\\output2.txt");
+    while (N > 0 && min_len < 100){
+        std::ifstream text("..\\..\\text.txt");
+        while (text >> bufer){
+            if (strlen((char*)bufer) == min_len && N > 0){
+                out << bufer << "\n";
+                N--;
+            }
+        }
+        min_len++;
+        text.close();
+    }
     
     
-
+    out.close();
     return 0;
 }

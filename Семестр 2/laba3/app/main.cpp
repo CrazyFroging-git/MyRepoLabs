@@ -14,7 +14,7 @@ int main() {
         Player player1("Иван", 0, 0, 100, "Убегает от монстра", {});
         //std::cout << player1.GetName() << std::endl;
         //std::cout << player1.GetPosX() << std::endl;
-        //player1.setPosX(100);
+        //player1.setPosX(100);лщ
         Player player2("Роберт", 11, 79, 91, "Обыскивает сундук", {});
         //std::cout << player1.GetPosX() << std::endl;
         Player player3 = player1 / player2;
